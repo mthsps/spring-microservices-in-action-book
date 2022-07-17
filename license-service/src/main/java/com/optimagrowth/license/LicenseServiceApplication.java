@@ -2,6 +2,7 @@ package com.optimagrowth.license;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
@@ -11,6 +12,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 @SpringBootApplication
+@RefreshScope
 public class LicenseServiceApplication {
 
     public static void main(String[] args) {
