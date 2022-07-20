@@ -10,6 +10,13 @@ spring:
       uri: http://localhost:8071
       failFast: true
 
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.optimagrowth: DEBUG
+
+
 resilience4j.circuitbreaker:
   instances:
     licenseService:
@@ -58,3 +65,12 @@ resilience4j.thread-pool-bulkhead:
       maxThreadPoolSize: 1
       coreThreadPoolSize: 1
       queueCapacity: 1
+
+
+management:
+  endpoint:
+    gateway:
+      enabled: true # default value
+    web:
+      exposure:
+        include: gateway
