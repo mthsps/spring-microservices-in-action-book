@@ -12,12 +12,14 @@ spring:
             - Path=/organization/**
           filters:
             - RewritePath=/organization/(?<path>.*), /$\{path}
-        - id: licensing-service
+            - RemoveRequestHeader= Cookie,Set-Cookie
+        - id: license-service
           uri: lb://license-service
           predicates:
             - Path=/license/**
           filters:
             - RewritePath=/license/(?<path>.*), /$\{path}
+            - RemoveRequestHeader= Cookie,Set-Cookie
 
 server:
   port: 8072
@@ -37,3 +39,5 @@ management:
     web:
       exposure:
         include: "*"
+
+RemoveRequestHeader: Cookie,Set-Cookie
