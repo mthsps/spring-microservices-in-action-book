@@ -4,10 +4,10 @@ spring:
   profiles:
     active: dev
   config:
-    import: optional:configserver:http://localhost:8071
+    import: optional:configserver:http://configserver:8071
   cloud:
     config:
-      uri: http://localhost:8071
+      uri: http://configserver:8071
       failFast: true
 
 logging:
@@ -15,6 +15,11 @@ logging:
     com.netflix: WARN
     org.springframework.web: WARN
     com.optimagrowth: DEBUG
+
+management.endpoints.enabled-by-default: false
+management.endpoint.health:
+  enabled: true
+  show-details: always
 
 
 resilience4j.circuitbreaker:
@@ -65,12 +70,3 @@ resilience4j.thread-pool-bulkhead:
       maxThreadPoolSize: 1
       coreThreadPoolSize: 1
       queueCapacity: 1
-
-
-management:
-  endpoint:
-    gateway:
-      enabled: true # default value
-    web:
-      exposure:
-        include: gateway
