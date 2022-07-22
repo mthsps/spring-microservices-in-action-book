@@ -2,6 +2,7 @@ package com.optimagrowth.organization.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "organizations")
+@ToString
 @Getter
 @Setter
+@Table(name = "organizations")
 public class Organization {
     @Id
     @Column(name = "organization_id", nullable = false)
