@@ -1,6 +1,6 @@
 package com.optimagrowth.license.service;
 
-import com.optimagrowth.license.config.ServiceConfig;
+import com.optimagrowth.license.config.RedisConfig;
 import com.optimagrowth.license.model.License;
 import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.utils.UserContextHolder;
@@ -27,7 +27,7 @@ public class LicenseService {
     @Autowired
     private LicenseRepository licenseRepository;
     @Autowired
-    ServiceConfig config;
+    RedisConfig config;
 
     private static final Logger logger = LoggerFactory.getLogger(LicenseService.class);
 

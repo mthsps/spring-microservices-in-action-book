@@ -1,3 +1,4 @@
+/*
 package com.optimagrowth.organization.config;
 
 import org.keycloak.adapters.KeycloakConfigResolver;
@@ -61,3 +62,4 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         return new KeycloakRestTemplate(keycloakClientRequestFactory);
     }
 }
+*/

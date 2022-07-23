@@ -10,3 +10,8 @@ spring:
             uri: http://configserver:8071
             failFast: true
 
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.optimagrowth: DEBUG
