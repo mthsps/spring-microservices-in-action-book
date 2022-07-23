@@ -1,3 +1,4 @@
+/*
 package com.optimagrowth.organization.config;
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
@@ -11,3 +12,4 @@ public class KeycloakConfiguration {
         return new KeycloakSpringBootConfigResolver();
     }
 }
+*/

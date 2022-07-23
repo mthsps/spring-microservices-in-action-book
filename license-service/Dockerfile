@@ -1,4 +1,4 @@
-FROM openjdk:17.0-jdk-slim as build
+FROM openjdk:11-slim as build
 
 ARG JAR_FILE
 
@@ -6,7 +6,7 @@ COPY ${JAR_FILE} app.jar
 
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf /app.jar)
 
-FROM openjdk:17.0-jdk-slim
+FROM openjdk:11-slim
 
 VOLUME /tmp
 

@@ -1,4 +1,6 @@
+/*
 package com.optimagrowth.license.config;
+
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.springframework.context.annotation.Bean;
@@ -11,3 +13,5 @@ public class KeycloakConfiguration {
         return new KeycloakSpringBootConfigResolver();
     }
 }
+
+*/
