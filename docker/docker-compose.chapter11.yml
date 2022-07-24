@@ -51,7 +51,7 @@ services:
         aliases:
           - "redis"
   configserver:
-    image: ostock/configserver:CHAPTER-10
+    image: ostock/configserver:CHAPTER-11
     ports:
        - "8071:8071"
     networks:
@@ -105,6 +105,8 @@ services:
         condition: service_healthy
       configserver:
         condition: service_started
+      kafkaserver:
+        condition: service_started
     ports:
       - "8180:8080"
     networks:
@@ -120,6 +122,8 @@ services:
       database:
         condition: service_healthy
       configserver:
+        condition: service_started
+      kafkaserver:
         condition: service_started
     ports:
       - "8081:8081"
