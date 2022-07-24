@@ -1,23 +1,25 @@
 package com.optimagrowth.license.service.client;
 
+import brave.ScopedSpan;
+import brave.Tracer;
 import com.optimagrowth.license.model.Organization;
 import com.optimagrowth.license.repository.OrganizationRedisRepository;
 import com.optimagrowth.license.utils.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-@Configuration
 public class OrganizationRestTemplateClient {
-
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    Tracer tracer;
 
     @Autowired
     OrganizationRedisRepository redisRepository;
@@ -52,18 +54,23 @@ public class OrganizationRestTemplateClient {
     }
 
     private Organization checkRedisCache(String organizationId) {
+        ScopedSpan newSpan = tracer.startScopedSpan("readLicensingDataFromRedis");
         try {
             return redisRepository.findById(organizationId).orElse(null);
-        } catch (Exception ex){
+        }catch (Exception ex){
             logger.error("Error encountered while trying to retrieve organization {} check Redis Cache.  Exception {}", organizationId, ex);
             return null;
+        }finally {
+            newSpan.tag("peer.service", "redis");
+            newSpan.annotate("Client received");
+            newSpan.finish();
         }
     }
 
     private void cacheOrganizationObject(Organization organization) {
         try {
             redisRepository.save(organization);
-        } catch (Exception ex){
+        }catch (Exception ex){
             logger.error("Unable to cache organization {} in Redis. Exception {}", organization.getId(), ex);
         }
     }

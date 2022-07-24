@@ -3,6 +3,8 @@ package com.optimagrowth.organization.service;
 import java.util.Optional;
 import java.util.UUID;
 
+import brave.ScopedSpan;
+import brave.Tracer;
 import com.optimagrowth.organization.events.source.SimpleSourceBean;
 import com.optimagrowth.organization.utils.ActionEnum;
 import org.slf4j.Logger;
@@ -15,8 +17,10 @@ import com.optimagrowth.organization.repository.OrganizationRepository;
 
 @Service
 public class OrganizationService {
-
     private static final Logger logger = LoggerFactory.getLogger(OrganizationService.class);
+
+    @Autowired
+    Tracer tracer;
 
     @Autowired
     private OrganizationRepository repository;
@@ -25,8 +29,25 @@ public class OrganizationService {
     SimpleSourceBean simpleSourceBean;
 
     public Organization findById(String organizationId) {
-        Optional<Organization> opt = repository.findById(organizationId);
-        return opt.orElse(null);
+        Optional<Organization> opt;
+        ScopedSpan newSpan = tracer.startScopedSpan("getOrgDBCall");
+        try {
+            opt = repository.findById(organizationId);
+            simpleSourceBean.publishOrganizationChange(ActionEnum.GET, organizationId);
+            if (opt.isEmpty()) {
+                String message = String.format("Unable to find an organization with the Organization id %s",
+                        organizationId);
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            }
+            logger.debug("Retrieving Organization Info: " +
+                    opt.get().toString());
+        } finally {
+            newSpan.tag("peer.service", "postgres");
+            newSpan.annotate("Client received");
+            newSpan.finish();
+        }
+        return opt.get();
     }
 
     public Organization create(Organization organization) {
@@ -39,13 +60,14 @@ public class OrganizationService {
         return organization;
     }
 
-
     public void update(Organization organization){
         repository.save(organization);
+        simpleSourceBean.publishOrganizationChange(ActionEnum.UPDATED, organization.getId());
     }
 
-    public void delete(Organization organization){
-        repository.deleteById(organization.getId());
+    public void delete(String organizationId){
+        repository.deleteById(organizationId);
+        simpleSourceBean.publishOrganizationChange(ActionEnum.DELETED, organizationId);
     }
 
     @SuppressWarnings("unused")
